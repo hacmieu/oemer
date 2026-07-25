@@ -20,12 +20,14 @@ Thư mục chứa các kế hoạch công việc (đề xuất / đang làm / đ
 | Hạng mục | Trạng thái |
 |---|---|
 | SPIKE — kiểm chứng render + phát nhạc | ✅ **ĐẠT** ([báo cáo](../reports/20260725_2358-ket-qua-spike-osmd-playback.md)) |
-| Dựng môi trường dev + chạy pipeline thật | ✅ Xong (gỡ được lỗi chặn OpenCV 5) |
-| Wrapper `transcribe()` không qua argparse | ⬜ Chưa làm |
-| FastAPI + ProcessPoolExecutor + SQLite | ⬜ Chưa làm |
-| Frontend Next.js (upload → tiến độ → kết quả) | ⬜ Chưa làm |
-| Test hồi quy đồng thời (2 ảnh cùng lúc) | ⬜ Chưa làm |
+| Dựng môi trường dev + chạy pipeline thật | ✅ Xong |
+| Sửa lỗi chặn OpenCV 5 (vá code + ghim phiên bản) | ✅ Xong |
+| Wrapper `transcribe()` không qua argparse | ✅ Xong (`server/transcribe.py`) |
+| FastAPI + ProcessPoolExecutor + SQLite | ✅ Xong (`server/`) |
+| Test hồi quy đồng thời (2 ảnh cùng lúc) | ✅ **ĐẠT** ([báo cáo](../reports/20260726_0024-backend-mvp-va-test-dong-thoi.md)) |
+| Frontend Next.js (upload → tiến độ → kết quả) | ⬜ Chưa làm ← **việc tiếp theo** |
 | Dockerfile bake sẵn checkpoint | ⬜ Chưa làm |
+| Nén ảnh preview (đang nặng 4 MB) | ⬜ Chưa làm |
 
 **Phiên bản đã kiểm chứng, phải ghim**: `opensheetmusicdisplay@1.9.7` + `@isamu/osmd-audio-player@1.0.0` + `opencv-python-headless<5`.
 
@@ -36,9 +38,11 @@ Thư mục chứa các kế hoạch công việc (đề xuất / đang làm / đ
 | Chu kỳ | Nội dung | Tiêu chí thành công chính |
 |---|---|---|
 | **1 — MVP** | Upload → hàng đợi → OSMD render → phát nhạc → tải MusicXML | 2 người upload đồng thời không lẫn dữ liệu; bấm Play ra tiếng |
-| **2 — Quy mô** | Auth, Postgres, S3/R2, rate limit, auto-scale worker, design system, responsive | 20 người đồng thời không sập; Lighthouse a11y ≥ 90 |
+| **2 — Quy mô** | Auth, Postgres, S3/R2, rate limit, **thêm máy chạy worker**, design system, responsive | 20 người đồng thời không sập; Lighthouse a11y ≥ 90 |
 | **3 — Sửa nhạc** | Đánh giá lại RiffScore / tự xây lớp sửa trên OSMD / Flat.io Embed | Sửa lỗi OMR của 1 bản nhạc trong < 5 phút |
 
 **Stack**: Next.js + TypeScript + Tailwind + shadcn/ui · FastAPI · Redis/RQ · Postgres · Docker Compose · OSMD + `@isamu/osmd-audio-player`.
 
-**Bước tiếp theo**: SPIKE đã ĐẠT ✅. Tiếp tục Chu kỳ 1 với backend (wrapper `transcribe()` → FastAPI + `ProcessPoolExecutor` + SQLite) rồi tới frontend Next.js.
+**Bước tiếp theo**: SPIKE và backend đều ĐẠT ✅. Còn lại của Chu kỳ 1 là **frontend Next.js** (upload → tiến độ → xem bản nhạc → nghe → tải về) và Dockerfile.
+
+⚠️ **Điều chỉnh cho Chu kỳ 2**: đo thực tế cho thấy **tăng worker không tăng thông lượng** trên một máy (2 job song song mất 8 phút 41 giây, gần bằng chạy tuần tự). Muốn phục vụ 20 người đồng thời **bắt buộc phải thêm máy** — và đó chính là lúc tiêu chí kích hoạt Redis + RQ được thoả mãn.

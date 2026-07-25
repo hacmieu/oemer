@@ -121,7 +121,9 @@ def find_lines(data: ndarray, min_len: int = 10, max_gap: int = 20) -> List[BBox
     new_line = []
     if lines is not None:
         for line in lines:
-            line = line[0]
+            # OpenCV < 5 returns shape (N, 1, 4), OpenCV >= 5 returns (N, 4).
+            if line.ndim > 1:
+                line = line[0]
             top_x, bt_x = (line[0], line[2]) if line[0] < line[2] else (line[2], line[0])
             top_y, bt_y = (line[1], line[3]) if line[1] < line[3] else (line[3], line[1])
             new_line.append((top_x, top_y, bt_x, bt_y))

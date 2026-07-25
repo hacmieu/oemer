@@ -35,7 +35,8 @@ setuptools.setup(
     },
     install_requires=[
         onnx_package,
-        "opencv-python-headless>=4.5.3.56",
+        # Upper bound until the full pipeline is verified against OpenCV 5.
+        "opencv-python-headless>=4.5.3.56,<5",
         "matplotlib",
         "pillow",
         "scipy",
