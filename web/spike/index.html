@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>SPIKE — OSMD + Audio Player với MusicXML từ oemer</title>
+<style>
+  body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+         margin: 0; padding: 24px; background: #fafafa; color: #18181b; }
+  h1 { font-size: 20px; margin: 0 0 4px; }
+  .sub { color: #71717a; font-size: 14px; margin-bottom: 20px; }
+  .bar { display: flex; gap: 8px; align-items: center; flex-wrap: wrap;
+         background: #fff; padding: 12px; border: 1px solid #e4e4e7; border-radius: 8px; }
+  button { padding: 8px 14px; border: 1px solid #d4d4d8; background: #fff;
+           border-radius: 6px; cursor: pointer; font-size: 14px; }
+  button:hover:not(:disabled) { background: #f4f4f5; }
+  button:disabled { opacity: .4; cursor: not-allowed; }
+  #log { background: #18181b; color: #e4e4e7; padding: 12px; border-radius: 8px;
+         font-family: ui-monospace, Menlo, monospace; font-size: 12.5px;
+         white-space: pre-wrap; margin: 16px 0; min-height: 90px; line-height: 1.6; }
+  .ok { color: #4ade80; } .err { color: #f87171; } .warn { color: #fbbf24; }
+  #score { background: #fff; border: 1px solid #e4e4e7; border-radius: 8px;
+           padding: 16px; overflow-x: auto; }
+</style>
+</head>
+<body>
+<h1>SPIKE — Kiểm chứng hiển thị + phát nhạc</h1>
+<p class="sub">
+  Mục tiêu: xác nhận OpenSheetMusicDisplay và audio player đọc & phát được file
+  <code>.musicxml</code> <strong>do chính oemer sinh ra</strong>, trước khi đầu tư xây cả hệ thống.
+</p>
+
+<div class="bar">
+  <input type="file" id="file" accept=".musicxml,.xml,.mxl">
+  <button id="play" disabled>Phát</button>
+  <button id="pause" disabled>Tạm dừng</button>
+  <button id="stop" disabled>Dừng</button>
+</div>
+
+<div id="log">Đang nạp thư viện…</div>
+<div id="score"></div>
+
+<script type="module">
+// Ghim OSMD 1.9.7 cho khớp dependency của @isamu/osmd-audio-player (^1.9.7).
+// OSMD mới nhất là 2.1.0 -> lệch 1 major, đây chính là rủi ro cần SPIKE kiểm chứng.
+const OSMD_VERSION = "1.9.7";
+const PLAYER_VERSION = "1.0.0";
+
+const logEl = document.getElementById("log");
+const log = (msg, cls = "") =>
+  logEl.innerHTML += `<span class="${cls}">${msg}</span>\n`;
+
+let osmd, player;
+
+try {
+  const [osmdMod, playerMod] = await Promise.all([
+    import(`https://esm.sh/opensheetmusicdisplay@${OSMD_VERSION}`),
+    import(`https://esm.sh/@isamu/osmd-audio-player@${PLAYER_VERSION}?deps=opensheetmusicdisplay@${OSMD_VERSION}`),
+  ]);
+  // esm.sh đóng gói OSMD dạng CJS -> lớp nằm trong `default`, không phải named export.
+  const { OpenSheetMusicDisplay } = osmdMod.default ?? osmdMod;
+
+  log(`OSMD ${OSMD_VERSION} + @isamu/osmd-audio-player ${PLAYER_VERSION} đã nạp`, "ok");
+
+  osmd = new OpenSheetMusicDisplay(document.getElementById("score"), {
+    autoResize: true,
+    drawTitle: true,
+  });
+  player = new (playerMod.default ?? playerMod.AudioPlayer)();
+  log("Khởi tạo thành công.");
+  loadScore(await (await fetch("sample.musicxml")).text(), "sample.musicxml");
+} catch (e) {
+  log(`Nạp thư viện THẤT BẠI: ${e.message}`, "err");
+  log("=> Kết luận SPIKE: phải chuyển sang phương án dự phòng (server render MIDI/MP3).", "warn");
+}
+
+async function loadScore(xml, name) {
+  logEl.innerHTML = "";
+  try {
+    log(`Đang đọc: ${name} (${(xml.length / 1024).toFixed(1)} KB)`);
+    const t0 = performance.now();
+
+    await osmd.load(xml);
+    log(`OSMD parse MusicXML: OK`, "ok");
+
+    await osmd.render();
+    log(`OSMD render: OK (${Math.round(performance.now() - t0)} ms)`, "ok");
+
+    await player.loadScore(osmd);
+    log(`Audio player nạp bản nhạc: OK`, "ok");
+    log(`=> SPIKE ĐẠT: hiển thị và phát nhạc đều chạy.`, "ok");
+
+    for (const id of ["play", "pause", "stop"])
+      document.getElementById(id).disabled = false;
+  } catch (e) {
+    log(`THẤT BẠI: ${e.message}`, "err");
+    console.error(e);
+  }
+}
+
+document.getElementById("file").addEventListener("change", async (ev) => {
+  const file = ev.target.files[0];
+  if (file && osmd) loadScore(await file.text(), file.name);
+});
+
+document.getElementById("play").onclick = () => player.play();
+document.getElementById("pause").onclick = () => player.pause();
+document.getElementById("stop").onclick = () => player.stop();
+</script>
+</body>
+</html>

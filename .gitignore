@@ -2,6 +2,7 @@ __pycache__/
 .git/
 .venv/
 .vscode/
+node_modules/
 
 build/
 dist/
