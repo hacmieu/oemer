@@ -32,4 +32,7 @@ checkpoints/
 /rests_*
 /all_rests_*
 /sfn_*
-/clef_*server/data/
+/clef_*
+
+# Uploads, transcription results and the job database
+/server/data/

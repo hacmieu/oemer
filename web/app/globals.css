@@ -1,0 +1,98 @@
+@import "tailwindcss";
+
+/* Design tokens.
+   Neutrals: zinc. Accent: amber, used only for playback and in-progress state.
+   Primary actions use ink/canvas inversion rather than the accent, which keeps
+   button contrast well above AA in both themes.
+   Radius rule: controls 8px, panels 12px. Nothing else. */
+:root {
+  --canvas: #fafafa;
+  --surface: #ffffff;
+  --surface-sunken: #f4f4f5;
+  --line: #e4e4e7;
+  --line-strong: #d4d4d8;
+  --ink: #18181b;
+  --ink-muted: #52525b;
+  --ink-faint: #a1a1aa;
+  --accent: #b45309;
+  --accent-soft: #fef3c7;
+  --danger: #b91c1c;
+  --danger-soft: #fef2f2;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --canvas: #09090b;
+    --surface: #18181b;
+    --surface-sunken: #131316;
+    --line: #27272a;
+    --line-strong: #3f3f46;
+    --ink: #fafafa;
+    --ink-muted: #a1a1aa;
+    --ink-faint: #71717a;
+    --accent: #fbbf24;
+    --accent-soft: #2a1f07;
+    --danger: #f87171;
+    --danger-soft: #2a1212;
+  }
+}
+
+@theme inline {
+  --color-canvas: var(--canvas);
+  --color-surface: var(--surface);
+  --color-sunken: var(--surface-sunken);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-ink: var(--ink);
+  --color-ink-muted: var(--ink-muted);
+  --color-ink-faint: var(--ink-faint);
+  --color-accent: var(--accent);
+  --color-accent-soft: var(--accent-soft);
+  --color-danger: var(--danger);
+  --color-danger-soft: var(--danger-soft);
+
+  --radius-control: 0.5rem;
+  --radius-panel: 0.75rem;
+
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  background: var(--canvas);
+  color: var(--ink);
+}
+
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+}
+
+/* Notation is a document, not a UI surface. Like a photograph, it stays on
+   white paper in dark mode instead of being inverted into an unreadable
+   negative of itself. */
+.paper {
+  background: #ffffff;
+  color: #18181b;
+}
+
+/* The playback cursor is an <img> that OSMD sizes with width/height attributes
+   and parks at z-index -1, assuming nothing is painted behind it. Two things
+   parks at z-index -1, assuming nothing is painted behind it. The .paper white
+   above would swallow it, and the inline z-index means only !important wins.
+   Multiply keeps the notes legible once the cursor sits over them.
+   Its height is restored in score-viewer.tsx; CSS cannot read the attribute. */
+#osmd-host img[id^="cursorImg"] {
+  z-index: 0 !important;
+  mix-blend-mode: multiply;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}

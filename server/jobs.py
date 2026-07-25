@@ -9,6 +9,7 @@ which the standard library already provides. See
 plans/20260725_2338-act-don-gian-hoa-hang-doi.md for the upgrade triggers.
 """
 import os
+import re
 import sqlite3
 import uuid
 from concurrent.futures import ProcessPoolExecutor
@@ -56,6 +57,17 @@ def _now() -> str:
     return datetime.now(timezone.utc).isoformat(timespec="seconds")
 
 
+def _safe_name(filename: str) -> str:
+    """Client-supplied name reduced to something safe to use as a path segment.
+
+    It reaches the filesystem and ends up as the score title, so it must not be
+    able to escape the job directory.
+    """
+    name = Path(filename).name.strip()
+    name = re.sub(r"[^\w. -]", "_", name, flags=re.UNICODE).lstrip(".")
+    return name or "ban-nhac.png"
+
+
 def _set_status(db_path: Path, job_id: str, **fields) -> None:
     cols = ", ".join(f"{k} = ?" for k in fields)
     with _connect(db_path) as conn:
@@ -92,7 +104,11 @@ class JobQueue:
 
     def enqueue(self, filename: str, image_bytes: bytes) -> str:
         job_id = uuid.uuid4().hex
-        img_path = UPLOAD_DIR / f"{job_id}{Path(filename).suffix or '.png'}"
+        # oemer titles the score after the image file, so the upload keeps its
+        # original name inside a per-job directory rather than being renamed to
+        # the job id.
+        img_path = UPLOAD_DIR / job_id / _safe_name(filename)
+        img_path.parent.mkdir(parents=True, exist_ok=True)
         img_path.write_bytes(image_bytes)
 
         with _connect(DB_PATH) as conn:

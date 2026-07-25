@@ -60,7 +60,9 @@ pytest server/tests/ -v
 
 **3. Bake sẵn checkpoint vào Docker image.** Hàm tải của oemer dùng chunk 512 byte nên cực chậm (5 phút mới được 19% của 1 file, trong khi `curl` tải 109 MB hết 20 giây).
 
-**4. Ghim `opencv-python-headless<5`.** OpenCV 5 làm pipeline sập, và kể cả sau khi vá thì kết quả vẫn khác ~7% so với OpenCV 4. Chi tiết: `../reports/20260725_2358-loi-moi-truong-opencv5.md`.
+**4. Đừng đổi tên ảnh upload.** oemer lấy **tên file làm tiêu đề bản nhạc**, nên ảnh được lưu vào `uploads/{job_id}/{tên gốc}` chứ không đổi thành `{job_id}.jpg`. Đổi lại thì bản nhạc sẽ hiện tiêu đề là một chuỗi hex. Vì tên do client gửi lên nay trở thành đường dẫn thật, nó phải đi qua `_safe_name()` — có test bảo vệ ở `tests/test_uploads.py`.
+
+**5. Ghim `opencv-python-headless<5`.** OpenCV 5 làm pipeline sập, và kể cả sau khi vá thì kết quả vẫn khác ~7% so với OpenCV 4. Chi tiết: `../reports/20260725_2358-loi-moi-truong-opencv5.md`.
 
 ## Hiệu năng thực đo
 Transcribe 1 ảnh: **~4 phút** trên CPU Apple Silicon. Đây là lý do API không xử lý đồng bộ trong request mà phải dùng job + polling.
