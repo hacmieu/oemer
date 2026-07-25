@@ -6,7 +6,8 @@ Thư mục lưu trữ "trí nhớ" bền vững của dự án: các sự thật
 
 | Ngày giờ | Mục | Tóm tắt |
 |---|---|---|
-| 2026-07-26 00:59 | [**Frontend MVP xong — Chu kỳ 1 hoàn tất**](20260726_0059-frontend-mvp-xong.md) | **MỚI NHẤT.** Upload → chờ → xem → **nghe** → tải về, chạy thật end-to-end. Kèm 5 cạm bẫy OSMD đã trả giá (nhất là `autoResize` làm chết con trỏ phát nhạc). |
+| 2026-07-26 01:31 | [**Thử *Yêu Xa* từ Google Drive**](20260726_0131-thu-yeuxa-google-drive.md) | **MỚI NHẤT.** PDF lead sheet → PNG → 4 phút 29 giây → nghe được. 3 ô đầu khớp cao độ; không có lời/hợp âm. API chưa nhận PDF. |
+| 2026-07-26 00:59 | [Frontend MVP xong — Chu kỳ 1 hoàn tất](20260726_0059-frontend-mvp-xong.md) | Upload → chờ → xem → **nghe** → tải về, chạy thật end-to-end. Kèm 5 cạm bẫy OSMD đã trả giá (nhất là `autoResize` làm chết con trỏ phát nhạc). |
 | 2026-07-26 00:24 | [Backend MVP xong + Giới hạn thông lượng](20260726_0024-backend-mvp-da-xong.md) | `server/` đã chạy, lỗi tranh chấp đã chứng minh xử lý xong (28 vs 14 ô nhịp). ⚠️ **Tăng worker không tăng thông lượng** — muốn nhiều người dùng phải thêm máy. |
 | 2026-07-25 23:58 | [Kết quả SPIKE + Phiên bản đã kiểm chứng](20260725_2358-ket-qua-spike-va-phien-ban-da-kiem-chung.md) | SPIKE ĐẠT: render 183 ms + phát nhạc OK. Ghim `OSMD 1.9.7` + `@isamu/osmd-audio-player 1.0.0` + `opencv<5`. Bài học: phải test bằng bundler, không dùng CDN. |
 | 2026-07-25 23:38 | [Đính chính race condition + Chốt hàng đợi](20260725_2338-dinh-chinh-race-condition-va-chot-hang-doi.md) | Đã chứng minh lỗi bằng thực nghiệm; thủ phạm là `clear_data()` chứ không phải "đè". Chốt bỏ Redis/Celery khỏi MVP, dùng `ProcessPoolExecutor` + SQLite. Downloader checkpoint chậm do `chunk_size=512B`. |

@@ -6,7 +6,8 @@ Thư mục chứa các báo cáo phân tích/điều tra. Định dạng file: `
 
 | Ngày giờ | Báo cáo | Tóm tắt |
 |---|---|---|
-| 2026-07-26 00:59 | [**✅ Frontend MVP + 7 lỗi phát hiện khi chạy thật**](20260726_0059-frontend-mvp-va-loi-phat-hien.md) | **MỚI NHẤT.** Luồng đầy đủ đã chạy: upload → chờ → xem → nghe → tải về. 7 lỗi chỉ lộ ra khi nhìn màn hình thật, trong đó 3 lỗi **im lặng hoàn toàn** (tiêu đề thành mã job, con trỏ đứng yên, lỗi mạng báo nhầm). |
+| 2026-07-26 01:31 | [**Thử thực tế — *Yêu Xa* (PDF Google Drive)**](20260726_0131-thu-yeuxa-tu-google-drive.md) | **MỚI NHẤT.** Lead sheet có lời + hợp âm + watermark. Nhận diện 4′29″, nghe được, 3 ô đầu khớp cao độ. Không extract lời/hợp âm. API chưa nhận PDF. |
+| 2026-07-26 00:59 | [✅ Frontend MVP + 7 lỗi phát hiện khi chạy thật](20260726_0059-frontend-mvp-va-loi-phat-hien.md) | Luồng đầy đủ đã chạy: upload → chờ → xem → nghe → tải về. 7 lỗi chỉ lộ ra khi nhìn màn hình thật, trong đó 3 lỗi **im lặng hoàn toàn** (tiêu đề thành mã job, con trỏ đứng yên, lỗi mạng báo nhầm). |
 | 2026-07-26 00:24 | [✅ Backend MVP + Test đồng thời](20260726_0024-backend-mvp-va-test-dong-thoi.md) | Đã dựng FastAPI + ProcessPoolExecutor + SQLite. **Chứng minh hết lỗi tranh chấp**: 2 ảnh khác nhau upload đồng thời → 28 vs 14 ô nhịp, đúng kết quả từng ảnh. Phát hiện: **tăng worker không tăng thông lượng** trên 1 máy. |
 | 2026-07-25 23:58 | [**✅ Kết quả SPIKE — OSMD + phát nhạc**](20260725_2358-ket-qua-spike-osmd-playback.md) | **ĐẠT.** Render bản nhạc thật của oemer trong **183 ms**, audio player nạp OK, tự nhận đúng nhạc cụ Piano. Rủi ro số 1 đã gỡ. Cấu hình đã kiểm chứng: OSMD `1.9.7` + `@isamu/osmd-audio-player@1.0.0`. |
 | 2026-07-25 23:58 | [Lỗi chặn — OpenCV 5.x](20260725_2358-loi-moi-truong-opencv5.md) | Pipeline **sập hoàn toàn** với OpenCV 5: `HoughLinesP` đổi kiểu trả về `(N,1,4)` → `(N,4)`. `setup.py` không chặn trần nên pip cài nhầm bản 5. Phải ghim `<5`. |
@@ -28,3 +29,4 @@ Thư mục chứa các báo cáo phân tích/điều tra. Định dạng file: `
 10. **✅ Chu kỳ 1 đã xong** (báo cáo 00:59): người dùng tải ảnh lên và **nghe được** bản nhạc ngay trên trình duyệt.
 11. **⚠️ Lỗi giao diện nguy hiểm nhất là loại im lặng.** 3 trong 7 lỗi của chu kỳ này không ném exception, không vào log, và lọt qua cả kiểm tra kiểu lẫn lint. Chỉ nhìn màn hình thật với dữ liệu thật mới thấy.
 12. **⚠️ Tailwind và OSMD tranh chấp âm thầm**: preflight đặt `height: auto` cho mọi ảnh, làm con trỏ phát nhạc của OSMD co còn 1 pixel. Chi tiết cạm bẫy OSMD: `../memory/20260726_0059-frontend-mvp-xong.md`.
+13. **Thử bài thật *Yêu Xa*** (01:31): lead sheet PDF từ Drive chạy được sau khi chuyển PNG; giai điệu mở đầu khớp; **không** có lời/hợp âm; API **chưa nhận PDF**.

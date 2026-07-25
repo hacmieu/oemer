@@ -6,7 +6,8 @@ Thư mục chứa các kế hoạch công việc (đề xuất / đang làm / đ
 
 | Ngày giờ | Kế hoạch | Trạng thái | Tóm tắt |
 |---|---|---|---|
-| 2026-07-25 23:27 | [**PDCA — Frontend "Oemer Web"**](20260725_2327-pdca-frontend-oemer-web.md) | 🟢 ĐANG CHẠY | Kế hoạch chính thức. 3 chu kỳ PDCA: (1) MVP upload→xem→nghe, (2) chịu tải nhiều người dùng + UI chuyên nghiệp, (3) sửa nhạc online. |
+| 2026-07-26 01:31 | [ACT — Nhận PDF + giới hạn lead sheet](20260726_0131-act-nhan-pdf-va-gioi-han-lead-sheet.md) | 🟡 ĐỀ XUẤT C2 | Từ thử *Yêu Xa*: nhận/từ chối PDF rõ ràng; nhắc trên UI rằng lời + hợp âm không được extract. |
+| 2026-07-25 23:27 | [**PDCA — Frontend "Oemer Web"**](20260725_2327-pdca-frontend-oemer-web.md) | 🟢 ĐANG CHẠY | Kế hoạch chính thức. 3 chu kỳ PDCA: (1) MVP ✅, (2) quy mô, (3) sửa nhạc online. |
 | 2026-07-25 23:38 | [ACT — Đơn giản hoá hàng đợi](20260725_2338-act-don-gian-hoa-hang-doi.md) | ✅ ĐÃ ÁP DỤNG | **Sửa đổi kế hoạch trên.** Bỏ Redis/Celery khỏi MVP → dùng `ProcessPoolExecutor` + SQLite. Kèm tiêu chí đo được để biết khi nào mới cần nâng cấp. |
 
 ## Kế hoạch đã thay thế
@@ -44,6 +45,6 @@ Thư mục chứa các kế hoạch công việc (đề xuất / đang làm / đ
 
 **Stack đang chạy**: Next.js 16 + TypeScript + Tailwind 4 · FastAPI · `ProcessPoolExecutor` + SQLite · OSMD `1.9.7` + `@isamu/osmd-audio-player` `1.0.0`.
 
-**Bước tiếp theo**: Chu kỳ 1 đã xong ✅. Vào Chu kỳ 2, ba việc nên làm trước vì đã có bằng chứng cần: tự host soundfont, Dockerfile bake sẵn checkpoint, nén ảnh phân tích.
+**Bước tiếp theo**: Chu kỳ 1 đã xong ✅. Vào Chu kỳ 2, ưu tiên theo bằng chứng mới nhất: **nhận PDF** ([ACT 01:31](20260726_0131-act-nhan-pdf-va-gioi-han-lead-sheet.md)), tự host soundfont, Dockerfile bake sẵn checkpoint, nén ảnh phân tích.
 
 ⚠️ **Điều chỉnh cho Chu kỳ 2**: đo thực tế cho thấy **tăng worker không tăng thông lượng** trên một máy (2 job song song mất 8 phút 41 giây, gần bằng chạy tuần tự). Muốn phục vụ 20 người đồng thời **bắt buộc phải thêm máy** — và đó chính là lúc tiêu chí kích hoạt Redis + RQ được thoả mãn.
